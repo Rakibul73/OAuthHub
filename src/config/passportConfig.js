@@ -2,6 +2,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("../models/User");
+const authService = require("../services/auth.service");
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -23,19 +24,8 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const existingUser = await User.findOne({
-                    "google.id": profile.id,
-                });
-                if (existingUser) return done(null, existingUser);
-
-                const newUser = await new User({
-                    google: {
-                        id: profile.id,
-                        email: profile.emails[0].value,
-                    },
-                    name: profile.displayName,
-                }).save();
-                done(null, newUser);
+                const user = await authService.handleGoogleAuth(profile);
+                done(null, user);
             } catch (err) {
                 done(err, null);
             }
@@ -55,19 +45,8 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const existingUser = await User.findOne({
-                    "facebook.id": profile.id,
-                });
-                if (existingUser) return done(null, existingUser);
-
-                const newUser = await new User({
-                    facebook: {
-                        id: profile.id,
-                        email: profile.emails[0].value,
-                    },
-                    name: profile.displayName,
-                }).save();
-                done(null, newUser);
+                const user = await authService.handleFacebookAuth(profile);
+                done(null, user);
             } catch (err) {
                 done(err, null);
             }
