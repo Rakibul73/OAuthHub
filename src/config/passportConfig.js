@@ -14,25 +14,6 @@ passport.deserializeUser((id, done) => {
         .catch((err) => done(err));
 });
 
-// Google Strategy
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_CALLBACK_URL,
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                const user = await authService.handleGoogleAuth(profile);
-                done(null, user);
-            } catch (err) {
-                done(err, null);
-            }
-        }
-    )
-);
-
 // Facebook Strategy
 passport.use(
     new FacebookStrategy(

@@ -3,11 +3,21 @@ const session = require("express-session");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 dotenv.config();
 require("./config/passportConfig");
 
 const app = express();
+
+// Use CORS middleware
+app.use(
+    cors({
+        origin: "https://localhost:3000", // Replace with your frontend URL
+        methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+        credentials: true, // Allow credentials (if needed)
+    })
+);
 
 app.use(express.json());
 app.use(
