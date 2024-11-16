@@ -11,8 +11,8 @@ class LinkedInService {
         this.userService = userService;
     }
 
-    getAuthUrl() {
-        return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${this.config.clientId}&redirect_uri=${this.config.redirectUri}&scope=openid%20profile%20email`;
+    getAuthUrl(state) {
+        return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${this.config.clientId}&redirect_uri=${this.config.redirectUri}&scope=openid%20profile%20email&state=${state}`;
     }
 
     async getAccessToken(code) {
