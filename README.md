@@ -1,269 +1,351 @@
-# OAuthHub
+# OAuthHub Backend 🔐
 
-OAuthHub is a robust authentication service that provides a centralized authentication solution using various OAuth providers.
+OAuthHub is a robust, production-ready authentication service that provides a centralized OAuth solution supporting multiple providers. This backend API serves as the authentication hub for modern web applications.
 
-## Project Structure
+## 🔗 Related Repositories
+
+- **Frontend Repository**: [OAuthHub Frontend](https://github.com/Rakibul73/oauthhub_frontend)
+- **Backend Repository**: [OAuthHub Backend](https://github.com/Rakibul73/OAuthHub)
+
+## 🚀 Current Features
+
+### Core Authentication
+- ✅ **Multi-Provider OAuth2.0** - Google, Facebook, LinkedIn
+- ✅ **Secure Token Management** - JWT token generation and validation
+- ✅ **Session Management** - Express sessions with secure configuration
+- ✅ **User Profile Management** - Create, read, update user profiles
+
+### Infrastructure & Performance
+- ✅ **HTTPS Support** - SSL/TLS encryption with custom certificates  
+- ✅ **Clustered Architecture** - Multi-core CPU utilization for high performance
+- ✅ **MongoDB Integration** - Mongoose ODM with user data persistence
+- ✅ **CORS Configuration** - Cross-origin resource sharing for frontend integration
+
+### API Features
+- ✅ **RESTful API Design** - Clean, standardized endpoints
+- ✅ **User Management** - Profile CRUD operations with pagination
+- ✅ **Health Check Endpoints** - API status monitoring
+- ✅ **Error Handling** - Comprehensive error responses
+
+## 🏗️ Project Structure
 
 ```
 OAuthHub/
 ├── src/
-│   ├── app.js
-│   ├── server.js
+│   ├── app.js                 # Express app configuration
+│   ├── server.js              # HTTPS server with clustering
 │   ├── routes/
-│   │   ├── apiRoutes.js
-│   │   ├── authRoutes.js
-│   │   └── userRoutes.js
+│   │   ├── authRoutes.js      # OAuth authentication routes
+│   │   ├── userRoutes.js      # User management routes
+│   │   └── apiRoutes.js       # API status routes
 │   ├── models/
-│   │   └── User.js
-│   └── config/
-│       └── passportConfig.js
+│   │   └── User.js            # User schema & model
+│   └── services/
+│       ├── auth.service.js    # Authentication service
+│       ├── user.service.js    # User management service
+│       ├── google.service.js  # Google OAuth service
+│       ├── facebook.service.js # Facebook OAuth service
+│       ├── linkedin.service.js # LinkedIn OAuth service
+│       └── db.service.js      # Database service
+├── ssl/                       # SSL certificates
+├── .env                       # Environment variables
 └── package.json
 ```
+=======
 
-## Features
+## 🛠️ Tech Stack
 
-- OAuth2.0 Authentication
-- User Management
-- RESTful API
-- Passport.js Integration
-- Modular Route Structure
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: OAuth 2.0 (Google, Facebook, LinkedIn)
+- **Security**: HTTPS/SSL, Express Sessions, CORS
+- **Performance**: Node.js Cluster module
+- **HTTP Client**: Axios
 
-## Prerequisites
+## 📋 Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - npm or yarn
-- MongoDB (for user data storage)
+- MongoDB (local or cloud instance)
+- SSL certificates (provided in `/ssl` directory)
 
-## Installation
+## 🚀 Quick Start
 
-1. Clone the repository:
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/OAuthHub.git
+git clone https://github.com/Rakibul73/OAuthHub.git
 cd OAuthHub
 ```
 
-2. Install dependencies:
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-3. Set up environment variables:
-Create a `.env` file in the root directory and add necessary environment variables:
-```env
-PORT=3001
-SESSION_SECRET=your_session_secret
+### 3. Environment Configuration
+Create a `.env` file in the root directory:
 
-# Google OAuth
+```env
+# Server Configuration
+PORT=3000
+SESSION_SECRET=your_super_secret_session_key
+
+# Database
+MONGO_URI=mongodb://localhost:27017/oauthhub
+
+# Google OAuth Configuration
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_CALLBACK_URL=http://localhost:3001/auth/google/callback
+GOOGLE_CALLBACK_URL=https://localhost:3000/auth/google/callback
 
-# MongoDB
-MONGO_URI=your_mongodb_connection_string
-
-# Facebook OAuth
+# Facebook OAuth Configuration
 FACEBOOK_APP_ID=your_facebook_app_id
 FACEBOOK_APP_SECRET=your_facebook_app_secret
-FACEBOOK_CALLBACK_URL=http://localhost:3001/auth/facebook/callback
+FACEBOOK_CALLBACK_URL=https://localhost:3000/auth/facebook/callback
 
-# LinkedIn OAuth
+# LinkedIn OAuth Configuration
 LINKEDIN_CLIENT_ID=your_linkedin_client_id
 LINKEDIN_CLIENT_SECRET=your_linkedin_client_secret
-LINKEDIN_REDIRECT_URI=http://localhost:3001/auth/linkedin/callback
+LINKEDIN_REDIRECT_URI=https://localhost:3000/auth/linkedin/callback
 ```
 
-## Usage
-
-To start the server:
-
+### 4. Start the Server
 ```bash
+# Production mode with clustering
 npm start
-```
 
-For development with nodemon:
-```bash
+# Development mode (if you have nodemon installed)
 npm run dev
 ```
 
-## API Routes
+The server will be available at `https://localhost:3000`
 
-- `/auth/*` - Authentication routes
-- `/api/*` - API endpoints
-- `/user/*` - User management routes
+## 🔗 Frontend Integration
+
+This backend is designed to work with the [OAuthHub Frontend](https://github.com/Rakibul73/oauthhub_frontend). Make sure to:
+
+1. Set the correct API URL in your frontend `.env.local`:
+   ```env
+   NEXT_PUBLIC_API_URL=https://localhost:3000
+   ```
+
+2. Ensure both applications are running on HTTPS for OAuth providers to work properly
+
+## 📚 API Documentation
+
+### Base URL
+```
+https://localhost:3000
+```
+=======
 
 
 
 
 
-## Authentication Routes
+### 🔐 Authentication Endpoints
 
-### Google OAuth
+#### OAuth Initiation
+| Provider | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| Google | `/auth/google` | GET | Initiates Google OAuth flow |
+| Facebook | `/auth/facebook` | GET | Initiates Facebook OAuth flow |
+| LinkedIn | `/auth/linkedin` | GET | Initiates LinkedIn OAuth flow |
 
+#### OAuth Callbacks
+| Provider | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| Google | `/auth/google/callback` | GET | Handles Google OAuth callback |
+| Facebook | `/auth/facebook/callback` | GET | Handles Facebook OAuth callback |
+| LinkedIn | `/auth/linkedin/callback` | GET | Handles LinkedIn OAuth callback |
+
+**Example OAuth Flow:**
 ```bash
-# Initiate Google OAuth flow
-curl -X GET http://localhost:3001/auth/google
+# Step 1: Initiate OAuth (redirects to provider)
+GET https://localhost:3000/auth/google
 
-# Callback URL (handled by the server)
-# http://localhost:3001/auth/google/callback
+# Step 2: Provider redirects back with code
+# GET https://localhost:3000/auth/google/callback?code=xyz&state=abc
+
+# Step 3: Server responds with tokens
+{
+    "accessToken": "jwt_access_token",
+    "refreshToken": "jwt_refresh_token", 
+    "accessTokenExpireIn": 3600,
+    "refreshTokenExpireIn": 7200
+}
 ```
 
-### Facebook OAuth
+### 👤 User Management Endpoints
 
+#### Get User Profile
 ```bash
-# Initiate Facebook OAuth flow
-curl -X GET http://localhost:3001/auth/facebook
+GET /users/profile/:id
 
-# Callback URL (handled by the server)
-# http://localhost:3001/auth/facebook/callback
-```
+# Example
+curl -X GET https://localhost:3000/users/profile/64a82743b12345678901234
 
-### LinkedIn OAuth
-
-```bash
-# Initiate LinkedIn OAuth flow
-curl -X GET http://localhost:3001/auth/linkedin
-
-# Callback URL (handled by the server)
-# http://localhost:3001/auth/linkedin/callback
-```
-
-## User Routes
-
-### Get User Profile
-
-Retrieves a specific user's profile by ID.
-
-```bash
-# GET /profile/:id
-curl -X GET http://localhost:3001/users/profile/64a82743b12345678901234
-
-# Response (200 OK)
+# Response
 {
     "_id": "64a82743b12345678901234",
     "name": "John Doe",
-    "email": "john@example.com",
-    "provider": "google"
-}
-
-# Error Response (404 Not Found)
-{
-    "message": "User not found"
+    "google": {
+        "id": "google_user_id",
+        "email": "john@gmail.com"
+    },
+    "createdAt": "2024-01-15T10:30:00.000Z"
 }
 ```
 
-### Update User Profile
-
-Updates a user's profile information.
-
+#### Update User Profile
 ```bash
-# PUT /profile/:id
-curl -X PUT http://localhost:3001/users/profile/64a82743b12345678901234 \
+PUT /users/profile/:id
+
+# Example
+curl -X PUT https://localhost:3000/users/profile/64a82743b12345678901234 \
   -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Updated",
-    "email": "john.updated@example.com"
-  }'
-
-# Response (200 OK)
-{
-    "_id": "64a82743b12345678901234",
-    "name": "John Updated",
-    "email": "john.updated@example.com",
-    "provider": "google"
-}
-
-# Error Response (404 Not Found)
-{
-    "message": "User not found"
-}
+  -d '{"name": "John Updated"}'
 ```
 
-### Get Paginated Users
-
-Retrieves a paginated list of users with sorting options.
-
+#### Get Paginated Users
 ```bash
-# GET /users
-# Parameters:
-# - page (default: 1)
-# - limit (default: 10)
-# - sort (default: { createdAt: -1 })
+GET /users/users?page=1&limit=10
 
-# Get first page with 10 users
-curl -X GET "http://localhost:3001/users/users"
+# Example
+curl -X GET "https://localhost:3000/users/users?page=1&limit=5"
 
-# Get second page with 5 users
-curl -X GET "http://localhost:3001/users/users?page=2&limit=5"
-
-# Response (200 OK)
+# Response
 {
-    "users": [
-        {
-            "_id": "64a82743b12345678901234",
-            "name": "John Doe",
-            "email": "john@example.com",
-            "provider": "google"
-        },
-        // ... more users
-    ],
-    "totalPages": 5,
+    "users": [...],
+    "totalPages": 10,
     "currentPage": 1,
     "totalUsers": 50
 }
 ```
 
-## API Status Routes
+### 🔍 API Status Endpoints
 
-### Check API Status
-
+#### Health Check
 ```bash
-# GET /api/status
-curl -X GET http://localhost:3001/api/status
+GET /api/status
 
-# Response (200 OK)
+# Response
 {
     "status": "API is running",
-    "timestamp": "2023-07-20T10:30:00.000Z"
+    "timestamp": "2024-06-27T10:30:00.000Z"
 }
 ```
 
-### Welcome Endpoint
-
+#### Welcome
 ```bash
-# GET /api
-curl -X GET http://localhost:3001/api
+GET /api
 
-# Response (200 OK)
+# Response  
 {
     "status": "Welcome to OauthHub",
-    "timestamp": "2023-07-20T10:30:00.000Z"
+    "timestamp": "2024-06-27T10:30:00.000Z"
 }
 ```
 
-## Error Responses
+## 🗄️ Database Schema
 
-All endpoints may return the following error response in case of server errors:
-
-```json
+### User Model
+```javascript
 {
-    "message": "Server error",
-    "error": "Error details message"
+  name: String,
+  google: {
+    id: String,
+    email: String
+  },
+  facebook: {
+    id: String, 
+    email: String
+  },
+  linkedin: {
+    id: String,
+    email: String
+  },
+  createdAt: Date
 }
 ```
 
-## Notes
+## 🔒 Security Features
 
-1. All OAuth authentication flows require browser interaction and cannot be fully tested with curl commands.
-2. The callback URLs are handled automatically by the server after successful OAuth authentication.
-3. For protected routes, you may need to include authentication tokens in the headers (implementation dependent).
-4. All responses are in JSON format.
-5. Default pagination returns 10 items per page.
+- **HTTPS Enforcement** - All communication encrypted with SSL/TLS
+- **CORS Protection** - Configured for frontend domain only
+- **Session Security** - Secure session management with Express
+- **OAuth State Parameter** - CSRF protection in OAuth flows
+- **Environment Variables** - Sensitive data stored securely
+
+## ⚡ Performance Features
+
+- **Clustering** - Utilizes all available CPU cores
+- **Connection Pooling** - MongoDB connection optimization
+- **Async/Await** - Non-blocking I/O operations
+- **Error Handling** - Comprehensive error catching and reporting
+
+## 🚀 Deployment
+
+### Local Development
+```bash
+npm start
+```
+
+### Production Deployment
+1. Set up MongoDB (Atlas or self-hosted)
+2. Configure OAuth provider credentials
+3. Set up SSL certificates
+4. Configure environment variables
+5. Deploy to your preferred platform (AWS, Google Cloud, etc.)
+
+## 🔧 Environment Variables Reference
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `PORT` | Server port | No (default: 3000) |
+| `SESSION_SECRET` | Session encryption key | Yes |
+| `MONGO_URI` | MongoDB connection string | Yes |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | Yes |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | Yes |
+| `GOOGLE_CALLBACK_URL` | Google OAuth callback URL | Yes |
+| `FACEBOOK_APP_ID` | Facebook app ID | Yes |
+| `FACEBOOK_APP_SECRET` | Facebook app secret | Yes |
+| `FACEBOOK_CALLBACK_URL` | Facebook callback URL | Yes |
+| `LINKEDIN_CLIENT_ID` | LinkedIn client ID | Yes |
+| `LINKEDIN_CLIENT_SECRET` | LinkedIn client secret | Yes |
+| `LINKEDIN_REDIRECT_URI` | LinkedIn redirect URI | Yes |
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **SSL Certificate Errors**
+   - Ensure certificates are in `/ssl` directory
+   - Check certificate validity and paths
+
+2. **OAuth Provider Errors**
+   - Verify client IDs and secrets
+   - Check callback URLs match provider settings
+   - Ensure HTTPS is enabled
+
+3. **Database Connection Issues**
+   - Verify MongoDB URI
+   - Check database connectivity
+   - Ensure proper network access
+
+4. **CORS Errors**
+   - Verify frontend URL in CORS configuration
+   - Check protocol (HTTP vs HTTPS) consistency
+=======
 
 
 
 
 
-## Contributing
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -271,9 +353,36 @@ All endpoints may return the following error response in case of server errors:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
+### Development Guidelines
+- Follow existing code style and patterns
+- Add appropriate error handling
+- Update documentation for new features
+- Test OAuth flows thoroughly
+- Ensure security best practices
+
+## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👨‍💻 Author
+
+**Rakibul Islam**
+- GitHub: [@Rakibul73](https://github.com/Rakibul73)
+- LinkedIn: [Connect with me](https://linkedin.com/in/rakibul73)
+
+## 🙏 Acknowledgments
+
+- Express.js team for the excellent framework
+- MongoDB team for the robust database solution
+- OAuth provider teams (Google, Facebook, LinkedIn) for their APIs
+- Open source community for various packages used
+
+---
+
+**⭐ If you find this project helpful, please give it a star on GitHub!**
+
+For questions or support, please open an issue in the GitHub repository.
+=======
 
 
 
